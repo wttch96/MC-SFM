@@ -1,0 +1,53 @@
+name "生物燃料发电"
+
+every 1 ticks do 
+    input fe:: from IN_FE top side
+        output fe:: to each "电解器" top side
+        output fe:: to "乙烯" top side
+        output fe:: to "O->H" top side
+    forget
+
+    input fe:: from each "发电机" south side
+        output fe:: to OUT_FE top side
+    forget
+end
+
+every 20 ticks do 
+    -- 水
+    input fluid:: from IN_WATER
+        output fluid:: to each "电解器" top side
+        output fluid::  to each "O->H" top side
+    forget
+
+    input item:mekanism:substrate from "乙烯" top side
+        output item:mekanism:substrate to IN_AE
+    forget
+
+    -- 氢气
+    if each "O->H" top side has < 100 gas:: then
+        input gas:: from each "电解器" west side
+            output gas:: to each "乙烯" top side
+        forget
+    else
+        input gas:: from each "O->H" top side
+            output gas:: to each "乙烯" top side
+        forget
+    end
+
+    -- 氧气
+    input gas:: from each "电解器" east side
+        output gas:: to each "O->H" top side
+    forget
+
+
+    input item:mekanism:bio_fuel from IN_AE
+        output item:mekanism:bio_fuel to "乙烯" top side
+    forget
+
+    input item:minecraft:stick from IN_AE
+        output item:minecraft:stick to "O->H" top side
+    forget
+
+    input gas:: from "乙烯" top side
+        output gas:: to "发电机" top side
+end
