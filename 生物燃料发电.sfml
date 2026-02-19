@@ -5,10 +5,16 @@ every 1 ticks do
         output fe:: to each "电解器" top side
         output fe:: to "乙烯" top side
         output fe:: to "O->H" top side
+        output fe:: to U_FE top side
     forget
 
     input fe:: from each "发电机" south side
-        output fe:: to OUT_FE top side
+        -- 首先判断输入的fe是否超过，如果超过则输出到OUT_FE，否则输出回IN_FE
+        if IN_FE top side has > 10000000 fe:: then
+            output fe:: to OUT_FE top side
+        else
+            output fe:: to IN_FE top side
+        end
     forget
 end
 
@@ -16,7 +22,8 @@ every 20 ticks do
     -- 水
     input fluid:: from IN_WATER
         output fluid:: to each "电解器" top side
-        output fluid::  to each "O->H" top side
+        output fluid:: to each "O->H" top side
+        output fluid:: to each "乙烯" top side
     forget
 
     input item:mekanism:substrate from "乙烯" top side
@@ -40,14 +47,24 @@ every 20 ticks do
     forget
 
 
-    input item:mekanism:bio_fuel from IN_AE
+    input item:mekanism:bio_fuel from T
         output item:mekanism:bio_fuel to "乙烯" top side
     forget
 
-    input item:minecraft:stick from IN_AE
+    input item:minecraft:stick from T
         output item:minecraft:stick to "O->H" top side
     forget
 
     input gas:: from "乙烯" top side
         output gas:: to "发电机" top side
+    forget
+
+    -- 判断发电机的输入是否不足
+    if some "发电机" top side has < 1000 gas:: then
+        input 64 item:: from S_OUT
+            output 64 item:: to S_BUFF
+    else 
+        input 64 item:: from S_BUFF
+            output 64 item:: to S_OUT
+    end
 end
