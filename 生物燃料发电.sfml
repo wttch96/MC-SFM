@@ -1,11 +1,11 @@
 name "生物燃料发电"
 
+-- 添加储罐
 every 1 ticks do 
     input fe:: from IN_FE top side
         output fe:: to each "电解器" top side
         output fe:: to "乙烯" top side
         output fe:: to "O->H" top side
-        output fe:: to U_FE top side
     forget
 
     input fe:: from each "发电机" south side
@@ -30,37 +30,55 @@ every 20 ticks do
         output item:mekanism:substrate to IN_AE
     forget
 
-    -- 氢气
-    if each "O->H" top side has < 100 gas:: then
-        input gas:: from each "电解器" west side
-            output gas:: to each "乙烯" top side
+    -- 氢进乙烯
+    input gas:: from T_H2 south side
+        output 100 each gas:: to each "乙烯" top side
+    forget
+
+    -- 乙烯进罐
+    input gas:: from each "乙烯" bottom side
+        output gas:: to T_C2H4 south side
+    forget
+
+    -- 氢进储罐
+    input gas:: from each "O->H" east side
+        output gas:: to T_H2 south side
+    forget
+
+    -- 先消耗氧转的氢
+    -- if T_H2 south side has < 10000 gas:: then
+        input gas:: from each "电解器" top side
+            output gas:: to T_H2 south side
         forget
-    else
-        input gas:: from each "O->H" top side
-            output gas:: to each "乙烯" top side
-        forget
-    end
-
-    -- 氧气
-    input gas:: from each "电解器" east side
-        output gas:: to each "O->H" top side
+    -- end
+    input gas:: from each "电解器" bottom side
+        output gas:: to T_O2 south side
     forget
 
-
-    input item:mekanism:bio_fuel from T
-        output item:mekanism:bio_fuel to "乙烯" top side
+    -- 氧转氢气
+    input gas:: from T_O2 south side
+        output gas:: to "O->H" top side
     forget
 
-    input item:minecraft:stick from T
-        output item:minecraft:stick to "O->H" top side
+    input gas:: from T_H2 south side
+        output gas:: to "乙烯" top side
     forget
 
-    input gas:: from "乙烯" top side
-        output gas:: to "发电机" top side
+    input item:mekanism:bio_fuel from IN_AE
+        output item:mekanism:bio_fuel to each "乙烯" top side
+    forget
+
+    input item:minecraft:stick from IN_AE
+        output item:minecraft:stick to each "O->H" top side
+    forget
+
+    -- 发电
+    input gas:: from T_C2H4 south side
+        output 100 each gas:: to each "发电机" top side
     forget
 
     -- 判断发电机的输入是否不足
-    if some "发电机" top side has < 1000 gas:: then
+    if T_C2H4 south side has < 1000000 gas:: then
         input 64 item:: from S_OUT
             output 64 item:: to S_BUFF
     else 
