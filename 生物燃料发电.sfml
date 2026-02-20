@@ -3,12 +3,12 @@ name "生物燃料发电"
 -- 添加储罐
 every 1 ticks do 
     input fe:: from IN_FE top side
-        output fe:: to each "电解器" top side
-        output fe:: to "乙烯" top side
-        output fe:: to "O->H" top side
+        output fe:: to each M_Split top side
+        output fe:: to M_C2H4 top side
+        output fe:: to M_O2_H2 top side
     forget
 
-    input fe:: from each "发电机" south side
+    input fe:: from each M_G south side
         -- 首先判断输入的fe是否超过，如果超过则输出到OUT_FE，否则输出回IN_FE
         if IN_FE top side has > 10000000 fe:: then
             output fe:: to OUT_FE top side
@@ -21,60 +21,61 @@ end
 every 20 ticks do 
     -- 水
     input fluid:: from IN_WATER
-        output fluid:: to each "电解器" top side
-        output fluid:: to each "O->H" top side
-        output fluid:: to each "乙烯" top side
+        output fluid:: to each M_Split top side
+        output fluid:: to each M_O2_H2 top side
+        output fluid:: to each M_C2H4 top side
     forget
 
-    input item:mekanism:substrate from "乙烯" top side
+    -- 乙烯产出基质回收
+    input item:mekanism:substrate from M_C2H4 bottom side
         output item:mekanism:substrate to IN_AE
     forget
 
     -- 氢进乙烯
     input gas:: from T_H2 south side
-        output 100 each gas:: to each "乙烯" top side
+        output 100 each gas:: to each M_C2H4 top side
     forget
 
     -- 乙烯进罐
-    input gas:: from each "乙烯" bottom side
+    input gas:: from each M_C2H4 bottom side
         output gas:: to T_C2H4 south side
     forget
 
     -- 氢进储罐
-    input gas:: from each "O->H" east side
+    input gas:: from each M_O2_H2 east side
         output gas:: to T_H2 south side
     forget
 
     -- 先消耗氧转的氢
     -- if T_H2 south side has < 10000 gas:: then
-        input gas:: from each "电解器" top side
+        input gas:: from each M_Split top side
             output gas:: to T_H2 south side
         forget
     -- end
-    input gas:: from each "电解器" bottom side
+    input gas:: from each M_Split bottom side
         output gas:: to T_O2 south side
     forget
 
     -- 氧转氢气
     input gas:: from T_O2 south side
-        output gas:: to "O->H" top side
+        output gas:: to M_O2_H2 top side
     forget
 
     input gas:: from T_H2 south side
-        output gas:: to "乙烯" top side
+        output gas:: to M_C2H4 top side
     forget
 
     input item:mekanism:bio_fuel from IN_AE
-        output item:mekanism:bio_fuel to each "乙烯" top side
+        output 1 item:mekanism:bio_fuel to each M_C2H4 top side
     forget
 
     input item:minecraft:stick from IN_AE
-        output item:minecraft:stick to each "O->H" top side
+        output 3 item:minecraft:stick to each M_O2_H2 top side
     forget
 
     -- 发电
     input gas:: from T_C2H4 south side
-        output 100 each gas:: to each "发电机" top side
+        output 100 each gas:: to each M_G top side
     forget
 
     -- 判断发电机的输入是否不足
