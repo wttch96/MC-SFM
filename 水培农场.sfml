@@ -1,0 +1,23 @@
+name "水培农场"
+
+every 1 ticks do
+    input fe:: from "电池" top side
+        output fe:: to each "水培床" top side
+    forget
+end
+
+every 20 ticks do 
+    -- 水槽送入水培床
+    input fluid:: from "水槽"
+        output fluid:: to each "水培床" top side
+    forget
+    -- 以太气体送入水培床
+    input fluid:: from "AE接口"
+        output fluid:: to each "水培床" top side
+    forget
+
+    -- 回收水培床产出
+    input item:: from each "水培床" bottom side
+        output item:: to "AE接口"
+    forget
+end

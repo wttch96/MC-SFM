@@ -1,0 +1,52 @@
+name "无输入生物燃料发电"
+
+every 1 ticks do
+    input fe:: from "电力存储" top side
+        output fe:: to each FE_USE east side
+    forget
+    -- 两个 256M 的存电，只有内部够用比如超过 100M 才会给第二个存电输出
+    if "电力存储" top side has > 100000000 fe:: then
+        input fe:: from "电力存储" top side
+            output fe:: to "[输出]电力" top side
+        forget
+    end
+end
+
+every 20 ticks do 
+   -- 拿物品做生物燃料
+    input item:: from "植物存储"
+        output item:: to each "打粉机" top side
+    forget
+
+    -- 水槽送入分离器
+    input fluid:: from "水槽"
+        output fluid:: to each "分离器-水" east side
+    forget
+    -- 生产乙烯: 水 氢 生物质 ---> 乙烯 基片
+    -- 先拿缓存
+    if "【缓存】生物燃料" has > 0 item:: then
+        input item:: from "【缓存】生物燃料"
+            output item:: to each "乙烯生产" top side
+        forget
+    else
+        -- 没有缓存就直接拿打粉机的
+        input item:: from each "打粉机" bottom side
+            output item:: to each "乙烯生产" top side
+        forget
+
+    end
+    input gas:: from each "分离器-氢" west side
+        output gas:: to each "乙烯生产" top side
+    forget
+    input fluid:: from "水槽"
+        output fluid:: to each "乙烯生产" top side
+    forget
+    input item:: from each "乙烯生产" bottom side
+        output item:: to each "基片临时" 
+    forget
+
+    -- 乙烯发电
+    input gas:: from each "乙烯生产" bottom side
+        output gas:: to each "乙烯发电-乙烯" east side
+    forget
+end

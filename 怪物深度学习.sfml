@@ -1,0 +1,34 @@
+name "怪物深度学习"
+
+every 1 ticks do 
+    input fe:: from "【存储】电" top side
+        output fe:: to each "【用】电" top side
+    forget
+end
+
+every 20 ticks do 
+    -- 预测矩阵放槽1
+    input item:hostilenetworks:prediction_matrix  from "AE接口"
+        output item:hostilenetworks:prediction_matrix to each "【器】模拟室" slots 1
+    forget
+
+    -- 模拟室 槽2东西直接回收
+    input item:: from each "【器】模拟室" slots 2
+        output item:: to "AE接口"
+    forget
+
+    -- 模拟产物生成下界之星
+    input item:: from each "【器】模拟室" slots 3
+        output item:: to "【器】产物生成" slots 0
+    forget
+
+    -- 下界之星先供自己发电
+    input item:: from "【器】产物生成" slots 1-16
+        output item:: to each "发电机"
+    forget
+
+    input item:: from "【器】产物生成" slots 2-16
+        output item:: to "AE接口"
+    forget
+
+end

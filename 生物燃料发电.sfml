@@ -66,11 +66,11 @@ every 20 ticks do
     forget
 
     input item:mekanism:bio_fuel from IN_AE
-        output 1 item:mekanism:bio_fuel to each M_C2H4 top side
+        output 20 item:mekanism:bio_fuel to each M_C2H4 top side
     forget
 
     input item:minecraft:stick from IN_AE
-        output 3 item:minecraft:stick to each M_O2_H2 top side
+        output 30 item:minecraft:stick to each M_O2_H2 top side
     forget
 
     -- 发电
@@ -85,5 +85,11 @@ every 20 ticks do
     else 
         input 64 item:: from S_BUFF
             output 64 item:: to S_OUT
+    end
+
+    if T_O2 south side has > 1000000 gas:: then
+        input gas:: from T_O2 south side
+            output 1 gas:: to IN_AE
+        forget
     end
 end
