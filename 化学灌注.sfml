@@ -1,0 +1,22 @@
+name "化学灌注"
+
+every 1 ticks do 
+    input fe:: from "【池】电池" top side
+        -- 北面用电
+        output fe:: to each "【用】电" north side
+    forget
+end
+
+every 20 ticks do
+    input gas:mekanism:oxygen from "【池】化学品" top side
+        output gas:mekanism:oxygen to each "【用】氧气" north side
+    forget
+    input gas:mekanism:sulfur_dioxide from "【池】化学品" top side
+        output gas:mekanism:sulfur_dioxide to each "【用】二氧化硫" north side
+    forget
+
+    -- 产品返回ae
+    input gas:: from each "【输出】三氧化硫" south side
+        output gas:: to "AE接口"
+    forget
+end

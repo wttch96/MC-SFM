@@ -1,0 +1,18 @@
+name "氧化工厂"
+
+every 1 ticks do
+    input fe:: from "【池】电池" top side
+        output fe:: to each "【器】氧化工厂" top side
+    forget
+end
+
+every 20 ticks do
+    -- 
+    input item:: from "【输入】箱子"
+        output item:: to each "【器】氧化工厂" top side
+    forget
+
+    input gas:: from each  "【器】氧化工厂" bottom side
+        output gas:: to "AE接口"
+    forget
+end
