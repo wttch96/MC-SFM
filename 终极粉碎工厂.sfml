@@ -1,0 +1,19 @@
+name "终极粉碎工厂"
+
+every 1 ticks do    
+    -- 
+    input fe:: from each "[输入]电"
+        output fe:: to each "[用]电" top side
+    forget
+end
+
+every redstone pulse do
+    -- 粉碎机
+    input item:: from each "[输入]"
+        output item:: to each "[器]粉碎机" top side
+    forget
+
+    input item:: from each "[器]粉碎机" bottom side
+        output item:: to each "[输出]"
+    forget
+end

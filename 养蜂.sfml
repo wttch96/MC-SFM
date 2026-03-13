@@ -1,0 +1,12 @@
+
+every 20 ticks do
+    -- 玻璃瓶
+    input item:minecraft:glass_bottle from each "AE"
+        output 1 each item:: to each "养蜂箱" slots 0
+    forget
+
+    input item:: from each "养蜂箱"
+        output item:: to "AE"
+    forget
+
+end

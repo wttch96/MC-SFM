@@ -1,0 +1,20 @@
+name "蜜脾"
+
+every 1 ticks do 
+    input fe:: from "AE"
+        output fe:: to each "[用]电"
+    forget
+end
+
+every 20 ticks do
+    -- 蜜脾
+    input item::*_honeycomb from "AE"
+        output item:: to each "[器]离心机"
+    forget
+    input item::*_comb from "AE"
+        output item:: to each "[器]离心机"
+    forget
+    input item:: from each "[器]离心机"
+        output item:: to each "AE"
+    forget
+end
