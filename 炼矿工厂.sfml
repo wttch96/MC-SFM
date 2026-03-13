@@ -1,0 +1,58 @@
+name "终极炼矿工厂"
+
+every 1 ticks do 
+    input fe:: from "[输入]电"
+        output fe:: to each "[用]电" top side
+    forget
+end
+
+every redstone pulse do 
+    -- 粗矿提纯
+    input gas:: from "[输入]矿石" 
+        output gas:: to each "[器]提纯机" top side
+    forget
+end
+every redstone pulse do 
+    -- 粗矿提纯
+    input gas:: from "[输入]矿石" 
+        output gas:: to each "[器]提纯机" top side
+    forget
+end
+every redstone pulse do 
+    -- 粗矿提纯
+    input gas:: from "[输入]矿石" 
+        output gas:: to each "[器]提纯机" top side
+    forget
+end
+every redstone pulse do 
+    -- 粗矿提纯
+    input gas:: from "[输入]矿石" 
+        output gas:: to each "[器]提纯机" top side
+    forget
+end
+
+every 20 ticks do 
+    -- 电动挤压
+    input item:: from "[输入]矿石"
+        output item:: to each "[器]挤压机" slots 0
+    forget
+    input from each "[器]挤压机" bottom side
+        output to each "[器]提纯机" top side
+    forget
+    -- 粉碎工厂
+    input item:: from each "[器]提纯机" bottom side
+        output item:: to each "[器]粉碎机" top side
+    forget
+    -- 富集
+    input item:: from each "[器]粉碎机" bottom side
+        output item:: to each "[器]富集机" top side
+    forget
+    -- 熔炼
+    input item:: from each "[器]富集机" bottom side
+        output item:: to each "[器]熔炉" top side
+    forget
+    -- 收集
+    input item:: from each "[器]熔炉" bottom side
+        output item:: to "[输出]成品" top side
+    forget
+end

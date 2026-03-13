@@ -1,0 +1,12 @@
+every 1 ticks do
+    -- 收集FE
+    input fe:: from each "发电机"
+        output fe:: to each "[存储]电"
+    forget
+end
+
+every 20 ticks do 
+    input item:: from each "AE"
+        output 2 each item:: to each "发电机"
+    forget 
+end
